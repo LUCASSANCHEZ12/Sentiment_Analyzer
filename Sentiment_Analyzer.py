@@ -50,4 +50,20 @@ def plot_cm(cm):
     plt.show()
 
 cm = confusion_matrix(Y_test, P_test, normalize='true')
-plot_cm(cm)
+#plot_cm(cm)
+
+word_index_map = vectorizer.vocabulary_
+
+corte = 3
+
+print("Palabras más positivas:")
+for word, index in word_index_map.items():
+    weight = model.coef_[0][index]
+    if weight > corte:
+        print(word, weight)
+        
+print("Palabras más negativas:")
+for word, index in word_index_map.items():
+    weight = model.coef_[0][index]
+    if weight < -corte:
+        print(word, weight)
