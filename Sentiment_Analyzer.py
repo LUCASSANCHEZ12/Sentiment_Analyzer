@@ -67,3 +67,10 @@ for word, index in word_index_map.items():
     weight = model.coef_[0][index]
     if weight < -corte:
         print(word, weight)
+        
+with open('model_1_en.pkl', 'wb') as fout:
+    pickle.dump(model, fout)
+    
+with open('vectorizer.pkl', 'wb') as fout:
+    pickle.dump(vectorizer, fout)
+
