@@ -11,7 +11,7 @@
       <div *ngFor="let gameTitle of displayedTitles"
            class="bg-gray-900 rounded-lg shadow-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-300"
            (click)="loadGameReviews(gameTitle)">
-        <img src="/assets/placeholder.svg" alt="Game Screenshot" class="w-full h-48 object-cover"/>
+           <img [src]="'assets/images/' + gameTitle + '.jpg'" alt="Game Screenshot" class="w-full h-48 object-cover"/>
         <div class="p-4">
           <h3 class="text-lg font-bold">{{ gameTitle }}</h3>
         </div>
@@ -21,20 +21,16 @@
       <div class="bg-gray-900 rounded-lg shadow-lg p-6">
         <div class="flex items-center justify-between">
           <div>
-            <h2 class="text-2xl font-bold">{{ selectedGame?.title }}</h2>
+            <h2 class="text-2xl font-bold">{{ selectedGame.title }}</h2>
           </div>
-          <img src="/assets/placeholder.svg" alt="Game Screenshot" class="max-w-full max-h-full rounded-lg"/>
+          
         </div>
         <div class="mt-6">
           <h3 class="text-lg font-bold">Reviews</h3>
           <div class="grid gap-4 mt-4">
             <div *ngFor="let review of gameReviews" class="bg-gray-800 rounded-lg p-4">
               <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <div class="avatar w-8 h-8">
-                    <img src="/assets/placeholder-user.jpg" class="avatar-image"/>
-                  </div>
-                </div>
+                
                 <div [ngClass]="{'text-green-500': review.value === 1, 'text-red-500': review.value === 0}" class="flex items-center gap-1">
                   <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M7 10v12"/>
