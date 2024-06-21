@@ -38,6 +38,14 @@ except FileNotFoundError:
 class Review(BaseModel):
     review: str
 
+@app.get("/reviews", response_model=Dict[str, Any])
+def get_all_reviews():
+    
+    # read the .json file
+    with open('./reviews.json', 'r') as file:
+        data = json.load(file)
+    
+    return data
 @app.get("/reviews/{game_title}", response_model=Dict[str, Any])
 def get_reviews(game_title: str):
     
