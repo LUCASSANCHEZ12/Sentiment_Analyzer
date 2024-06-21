@@ -1,3 +1,4 @@
+// app.routes.ts
 import { Routes } from '@angular/router';
 import { provideRouter } from '@angular/router';
 import { GamesListComponent } from './games-list/games-list.component';

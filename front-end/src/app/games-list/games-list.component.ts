@@ -1,76 +1,60 @@
-import { Component } from '@angular/core';
+// games-list.component.ts
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Review {
-  id: number;
-  author: string;
-  date: string;
-  rating: string;
-  content: string;
-}
-
-interface Game {
-  title: string;
-  description: string;
-  reviews: Review[];
-}
+import { FormsModule } from '@angular/forms';
+import { ApiService } from '../../api.service';
+import { Game, Review } from '../interfaces/games';
 
 @Component({
   selector: 'app-games-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule], // Importa FormsModule aquí
   templateUrl: './games-list.component.html',
   styleUrls: ['./games-list.component.css']
 })
-export class GamesListComponent {
-  selectedGame: Game | null = null;
+export class GamesListComponent implements OnInit {
+  gameTitles: string[] = [];
+  displayedTitles: string[] = [];
+  selectedGame: Game | null = null;  
+  gameReviews: Review[] = [];
+  newReviewText: string = '';
 
-  games: Game[] = [
-    {
-      title: 'Game Title',
-      description: 'This is a brief description of the game, showcasing its key features and highlights.',
-      reviews: [
-        {
-          id: 1,
-          author: 'John Doe',
-          date: '2 days ago',
-          rating: 'Positive',
-          content: 'This game is amazing! I\'ve been playing it for hours and can\'t get enough. The graphics are stunning, the gameplay is smooth, and the story is engaging. Highly recommended!',
-        },
-        {
-          id: 2,
-          author: 'Jane Smith',
-          date: '1 week ago',
-          rating: 'Negative',
-          content: 'I was really disappointed with this game. The controls felt clunky, the story was lackluster, and the graphics were not up to par. I wouldn\'t recommend this to anyone.',
-        },
-      ],
-    },
-    {
-      title: 'Another Game',
-      description: 'This is a brief description of the game, showcasing its key features and highlights.',
-      reviews: [
-        {
-          id: 1,
-          author: 'John Doe',
-          date: '3 days ago',
-          rating: 'Positive',
-          content: 'This game is really fun! The gameplay is addictive and the graphics are great. I\'ve been playing it non-stop.',
-        },
-        {
-          id: 2,
-          author: 'Jane Smith',
-          date: '1 week ago',
-          rating: 'Negative',
-          content: 'I was disappointed with this game. The story was not very engaging and the controls felt unresponsive. I wouldn\'t recommend it.',
-        },
-      ],
-    },
-  ];
+  constructor(private apiService: ApiService) {}
 
-  constructor() {}
+  ngOnInit(): void {
+    this.loadGameTitles();
+  }
 
-  selectGame(game: Game): void {
-    this.selectedGame = game;
+  loadGameTitles(): void {
+    this.apiService.getGameTitles().subscribe((titles: string[]) => {
+      this.iterateTitles(titles);
+    });
+  }
+
+  iterateTitles(titles: string[]): void {
+    if (titles.length > 0) {
+      const currentTitle = titles[0];
+      this.displayedTitles.push(currentTitle);
+      setTimeout(() => this.iterateTitles(titles.slice(1)), 500); // Pasa la parte restante de la lista
+    }
+  }
+
+  loadGameReviews(gameTitle: string): void {
+    this.apiService.getGameReviews(gameTitle).subscribe((reviews: Review[]) => {
+      this.selectedGame = { title: gameTitle, reviews : {}};
+      this.gameReviews = reviews;
+    });
+  }
+
+  submitReview(): void {
+    if (this.selectedGame) {
+      this.apiService.addReview(this.selectedGame.title, this.newReviewText).subscribe(response => {
+        console.log('Review added:', response);
+        this.newReviewText = '';
+        this.loadGameReviews(this.selectedGame!.title); // Reload reviews after adding new one
+      }, error => {
+        console.error('Error adding review:', error);
+      });
+    }
   }
 }
