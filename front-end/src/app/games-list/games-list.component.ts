@@ -1,4 +1,3 @@
-// games-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,10 +7,11 @@ import { Game, Review } from '../interfaces/games';
 @Component({
   selector: 'app-games-list',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Importa FormsModule aquí
+  imports: [CommonModule, FormsModule], // Import FormsModule here
   templateUrl: './games-list.component.html',
   styleUrls: ['./games-list.component.css']
 })
+
 export class GamesListComponent implements OnInit {
   gameTitles: string[] = [];
   displayedTitles: string[] = [];

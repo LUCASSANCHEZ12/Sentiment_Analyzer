@@ -7,8 +7,8 @@ from typing import Dict, Any
 import dill as pickle
 import sys
 
-sys.path.append("..")
-from Stopwords import filter_review
+sys.path.append("../model")
+from model import Stopwords as sw
 
 app = FastAPI()
 
@@ -23,13 +23,13 @@ app.add_middleware(
 
 # Load the model and the vectorizer
 try:
-    with open('./../model_1_en.pkl', 'rb') as fin:
+    with open('./../model/model_1_en.pkl', 'rb') as fin:
         model_loaded = pickle.load(fin)
 except FileNotFoundError:
     print("Error: 'model_1_en.pkl' not found.")
 
 try:
-    with open('./../vectorizer.pkl', 'rb') as fin:
+    with open('./../model/vectorizer.pkl', 'rb') as fin:
         vectorizer = pickle.load(fin)
 except FileNotFoundError:
     print("Error: 'vectorizer.pkl' not found.")
@@ -61,7 +61,7 @@ def get_reviews(game_title: str):
     
 # Helper function to filter and predict review
 def get_prediction(text):
-    processed_text = filter_review(text)
+    processed_text = sw.filter_review(text)
     vectorized_text = vectorizer.transform([processed_text])
     prediction = model_loaded.predict(vectorized_text)[0]
     return int(prediction)  # Convert to int for JSON serialization 
