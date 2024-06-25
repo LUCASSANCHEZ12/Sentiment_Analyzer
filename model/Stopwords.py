@@ -20,7 +20,7 @@ stop_words_en = stop_words_en.union(additional_exclusions)
 
 def filter_review(reviews):
   #Tokenize the text
-  tokens = word_tokenize(reviews)
+  tokens = word_tokenize(reviews.lower())
 
   #Remove stop words
   filtered_tokens = [token for token in tokens if token not in stop_words_en]
