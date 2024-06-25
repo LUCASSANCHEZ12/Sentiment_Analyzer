@@ -8,7 +8,7 @@ import dill as pickle
 import sys
 
 sys.path.append("../model")
-from model import Stopwords as sw
+from Stopwords import filter_review
 
 app = FastAPI()
 
@@ -61,7 +61,7 @@ def get_reviews(game_title: str):
     
 # Helper function to filter and predict review
 def get_prediction(text):
-    processed_text = sw.filter_review(text)
+    processed_text = filter_review(text)
     vectorized_text = vectorizer.transform([processed_text])
     prediction = model_loaded.predict(vectorized_text)[0]
     return int(prediction)  # Convert to int for JSON serialization 

@@ -58,17 +58,26 @@ cm = confusion_matrix(Y_test, P_test, normalize='true')
 word_index_map = vectorizer.vocabulary_
 cut = 4.5
 
-print("Most positive words:")
+# Show most positive and negative words of the training
+print("\n\n-------------------Most positive words:")
 for word, index in word_index_map.items():
     weight = model.coef_[0][index]
     if weight > cut:
         print(word, weight)
         
-print("Most negative words:")
+print("\n-------------------Most negative words:")
 for word, index in word_index_map.items():
     weight = model.coef_[0][index]
     if weight < -cut:
         print(word, weight)
+
+# Plot the distribuition of the words
+plt.hist(model.coef_[0], bins=10)
+plt.show()
+
+# plot the confussion matrix of the trained model
+cm = confusion_matrix(Y_test, P_test, normalize='true')
+plot_cm(cm)
 
 # Saving the model     
 with open('model_1_en.pkl', 'wb') as fout:
